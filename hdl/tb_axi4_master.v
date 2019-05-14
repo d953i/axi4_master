@@ -9,9 +9,9 @@ reg  tb_clock;
 reg  tb_reset;
 
 reg          tb_start;
-reg          tb_ready;
-reg          tb_idle;
-reg          tb_done;
+wire         tb_ready;
+wire         tb_idle;
+wire         tb_done;
 reg  [63:0]  tb_waddr;
 reg  [255:0] tb_wdata;
 
@@ -24,6 +24,7 @@ initial begin
     tb_reset = 1; 
 
 	#(CLK_PERIOD);
+	tb_start = 1;
 	tb_waddr = 'h01;
 	tb_wdata = 101;
 

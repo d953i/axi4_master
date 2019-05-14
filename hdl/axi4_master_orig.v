@@ -1,13 +1,13 @@
 
 `timescale 1 ns / 1 ps
 
-module axi256 #
+module axi4_master #
 (
     // Users to add parameters here
     // User parameters ends
     // Do not modify the parameters beyond this line
         
-    parameter C_M_TARGET_SLAVE_BASE_ADDR   = 64'h00000000, // Base address of targeted slave
+    parameter P_TARGET_SLAVE_BASE_ADDR   = 64'h00000000, // Base address of targeted slave
     
     parameter integer C_M_AXI_BURST_LEN    = 16,  //Burst Length. Supports 1, 2, 4, 8, 16, 32, 64, 128, 256 burst lengths
     parameter integer C_M_AXI_ID_WIDTH     = 4,   //Thread ID Width
@@ -138,10 +138,10 @@ localparam integer C_MASTER_LENGTH = 12;
 localparam integer C_NO_BURSTS_REQ = C_MASTER_LENGTH-clogb2((C_M_AXI_BURST_LEN*C_M_AXI_DATA_WIDTH/8)-1);
 
 // Example State machine to initialize counter, initialize write transactions,  initialize read transactions and comparison of read data with the written data words.
-parameter [1:0] IDLE = 2'b00, // This state initiates AXI4Lite transaction after the state machine changes state to INIT_WRITE when there is 0 to 1 transition on INIT_AXI_TXN
-        INIT_WRITE   = 2'b01, // This state initializes write transaction, once writes are done, the state machine changes state to INIT_READ 
-        INIT_READ    = 2'b10, // This state initializes read transaction once reads are done, the state machine  changes state to INIT_COMPARE 
-        INIT_COMPARE = 2'b11; // This state issues the status of comparison of the written data with the read data	
+localparam [1:0] IDLE         = 2'b00; // This state initiates AXI4Lite transaction after the state machine changes state to INIT_WRITE when there is 0 to 1 transition on INIT_AXI_TXN
+localparam [1:0] INIT_WRITE   = 2'b01; // This state initializes write transaction, once writes are done, the state machine changes state to INIT_READ 
+localparam [1:0] INIT_READ    = 2'b10; // This state initializes read transaction once reads are done, the state machine  changes state to INIT_COMPARE 
+localparam [1:0] INIT_COMPARE = 2'b11; // This state issues the status of comparison of the written data with the read data	
 
 reg [1:0] mst_exec_state;
 
@@ -188,11 +188,11 @@ wire init_txn_pulse;
 //I/O Connections. Write Address (AW)
 assign M_AXI_AWID = 'b0;
 //The AXI address is a concatenation of the target base address + active offset range
-assign M_AXI_AWADDR = C_M_TARGET_SLAVE_BASE_ADDR + axi_awaddr;
+assign M_AXI_AWADDR = P_TARGET_SLAVE_BASE_ADDR + axi_awaddr;
 //Burst LENgth is number of transaction beats, minus 1
 assign M_AXI_AWLEN= C_M_AXI_BURST_LEN - 1;
 //Size should be C_M_AXI_DATA_WIDTH, in 2^SIZE bytes, otherwise narrow bursts are used
-assign M_AXI_AWSIZE = clogb2((C_M_AXI_DATA_WIDTH/8)-1);
+assign M_AXI_AWSIZE = clogb2((C_M_AXI_DATA_WIDTH / 8) - 1);
 //INCR burst type is usually used, except for keyhole bursts
 assign M_AXI_AWBURST = 2'b01;
 assign M_AXI_AWLOCK = 1'b0;
@@ -205,7 +205,7 @@ assign M_AXI_AWVALID = axi_awvalid;
 //Write Data(W)
 assign M_AXI_WDATA = axi_wdata;
 //All bursts are complete and aligned in this example
-assign M_AXI_WSTRB = {(C_M_AXI_DATA_WIDTH/8){1'b1}};
+assign M_AXI_WSTRB = {(C_M_AXI_DATA_WIDTH / 8){1'b1}};
 assign M_AXI_WLAST = axi_wlast;
 assign M_AXI_WUSER = 'b0;
 assign M_AXI_WVALID = axi_wvalid;
@@ -213,7 +213,7 @@ assign M_AXI_WVALID = axi_wvalid;
 assign M_AXI_BREADY = axi_bready;
 //Read Address (AR)
 assign M_AXI_ARID = 'b0;
-assign M_AXI_ARADDR = C_M_TARGET_SLAVE_BASE_ADDR + axi_araddr;
+assign M_AXI_ARADDR = P_TARGET_SLAVE_BASE_ADDR + axi_araddr;
 //Burst LENgth is number of transaction beats, minus 1
 assign M_AXI_ARLEN = C_M_AXI_BURST_LEN - 1;
 //Size should be C_M_AXI_DATA_WIDTH, in 2^n bytes, otherwise narrow bursts are used
@@ -240,9 +240,9 @@ assign init_txn_pulse = (!init_txn_ff2) && init_txn_ff;
 //Generate a pulse to initiate AXI transaction.
 always @(posedge M_AXI_ACLK) begin
     // Initiates AXI transaction delay
-    if (M_AXI_ARESETN == 0 ) begin
-        init_txn_ff <= 1'b0;
-        init_txn_ff2 <= 1'b0;
+    if (M_AXI_ARESETN == 0) begin
+        init_txn_ff <= 0;
+        init_txn_ff2 <= 0;
     end else begin  
         init_txn_ff <= INIT_AXI_TXN;
         init_txn_ff2 <= init_txn_ff;
