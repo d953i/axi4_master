@@ -1,5 +1,5 @@
 
-set ProjectName tb_axi4_master
+set ProjectName tb_vcu1525_uram
 set ProjectFolder ./$ProjectName
 
 #Remove unnecessary files.
@@ -148,4 +148,3 @@ add_files -norecurse ./$ProjectName/$ProjectName.srcs/sources_1/bd/bd/hdl/bd_wra
 
 add_files -norecurse -scan_for_includes ./hdl/axi4_master.v
 add_files -fileset sim_1 -norecurse -scan_for_includes ./hdl/tb_axi4_master.v
-
