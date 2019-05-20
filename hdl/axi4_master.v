@@ -3,7 +3,7 @@
 
 module axi4_master #
 (
-    parameter P_TARGET_SLAVE_BASE_ADDR     = 64'h0,                             // Base address of targeted slave
+    parameter P_TARGET_SLAVE_BASE_ADDR     = 64'h0,                             //Base address of targeted slave
     
     parameter integer C_M_AXI_BURST_LEN    = 16,                                //Burst Length. Supports 1, 2, 4, 8, 16, 32, 64, 128, 256 burst lengths
     parameter integer C_M_AXI_ID_WIDTH     = 4,                                 //Thread ID Width
@@ -19,54 +19,54 @@ module axi4_master #
     input  wire WRITE_ENABLED,
     input  wire [C_M_AXI_ADDR_WIDTH - 1:0] WRITE_ADDR,
     input  wire [C_M_AXI_DATA_WIDTH - 1:0] WRITE_DATA,
-    output wire WRITE_DONE,                                                     // Asserts when transaction is complete
-    output wire WRITE_ERROR,                                                    // Asserts when ERROR is detected
+    output wire WRITE_DONE,                                                     //Asserts when transaction is complete
+    output wire WRITE_ERROR,                                                    //Asserts when ERROR is detected
 
-    input  wire M_AXI_ACLK,                                                     // Global Clock Signal.
-    input  wire M_AXI_ARESETN,                                                  // Global Reset Signal. This Signal is Active Low
-    output wire [C_M_AXI_ID_WIDTH - 1:0] M_AXI_AWID,                            // Master Interface Write Address ID
-    output wire [C_M_AXI_ADDR_WIDTH - 1:0] M_AXI_AWADDR,                        // Master Interface Write Address
-    output wire [7:0] M_AXI_AWLEN,                                              // Burst length. The burst length gives the exact number of transfers in a burst
-    output wire [2:0] M_AXI_AWSIZE,                                             // Burst size. This signal indicates the size of each transfer in the burst
-    output wire [1:0] M_AXI_AWBURST,                                            // Burst type. The burst type and the size information, determine how the address for each transfer within the burst is calculated.
-    output wire M_AXI_AWLOCK,                                                   // Lock type. Provides additional information about the atomic characteristics of the transfer.
-    output wire [3:0] M_AXI_AWCACHE,                                            // Memory type. This signal indicates how transactions are required to progress through a system.
-    output wire [2:0] M_AXI_AWPROT,                                             // Protection type. This signal indicates the privilege and security level of the transaction, and whether  the transaction is a data access or an instruction access.
-    output wire [3:0] M_AXI_AWQOS,                                              // Quality of Service, QoS identifier sent for each write transaction.
-    output wire [C_M_AXI_AWUSER_WIDTH - 1:0] M_AXI_AWUSER,                      // Optional User-defined signal in the write address channel.
-    output wire M_AXI_AWVALID,                                                  // Write address valid. This signal indicates that the channel is signaling valid write address and control information.
-    input  wire M_AXI_AWREADY,                                                  // Write address ready. This signal indicates that the slave is ready to accept an address and associated control signals
-    output wire [C_M_AXI_DATA_WIDTH-1 : 0] M_AXI_WDATA,                         // Master Interface Write Data.
-    output wire [C_M_AXI_DATA_WIDTH/8-1 : 0] M_AXI_WSTRB,                       // Write strobes. This signal indicates which byte lanes hold valid data. There is one write strobe bit for each eight bits of the write data bus.
-    output wire M_AXI_WLAST,                                                    // Write last. This signal indicates the last transfer in a write burst.
-    output wire [C_M_AXI_WUSER_WIDTH-1 : 0] M_AXI_WUSER,                        // Optional User-defined signal in the write data channel.
-    output wire M_AXI_WVALID,                                                   // Write valid. This signal indicates that valid write data and strobes are available
-    input  wire M_AXI_WREADY,                                                   // Write ready. This signal indicates that the slave can accept the write data.
-    input  wire [C_M_AXI_ID_WIDTH-1 : 0] M_AXI_BID,                             // Master Interface Write Response.
-    input  wire [1 : 0] M_AXI_BRESP,                                            // Write response. This signal indicates the status of the write transaction.
-    input  wire [C_M_AXI_BUSER_WIDTH-1 : 0] M_AXI_BUSER,                        // Optional User-defined signal in the write response channel
-    input  wire  M_AXI_BVALID,                                                  // Write response valid. This signal indicates that the channel is signaling a valid write response.
-    output wire  M_AXI_BREADY,                                                  // Response ready. This signal indicates that the master can accept a write response.
+    input  wire M_AXI_ACLK,                                                     //Global Clock Signal.
+    input  wire M_AXI_ARESETN,                                                  //Global Reset Signal. This Signal is Active Low
+    output wire [C_M_AXI_ID_WIDTH - 1:0] M_AXI_AWID,                            //Master Interface Write Address ID
+    output wire [C_M_AXI_ADDR_WIDTH - 1:0] M_AXI_AWADDR,                        //Master Interface Write Address
+    output wire [7:0] M_AXI_AWLEN,                                              //Burst length. The burst length gives the exact number of transfers in a burst
+    output wire [2:0] M_AXI_AWSIZE,                                             //Burst size. This signal indicates the size of each transfer in the burst
+    output wire [1:0] M_AXI_AWBURST,                                            //Burst type. The burst type and the size information, determine how the address for each transfer within the burst is calculated.
+    output wire M_AXI_AWLOCK,                                                   //Lock type. Provides additional information about the atomic characteristics of the transfer.
+    output wire [3:0] M_AXI_AWCACHE,                                            //Memory type. This signal indicates how transactions are required to progress through a system.
+    output wire [2:0] M_AXI_AWPROT,                                             //Protection type. This signal indicates the privilege and security level of the transaction, and whether  the transaction is a data access or an instruction access.
+    output wire [3:0] M_AXI_AWQOS,                                              //Quality of Service, QoS identifier sent for each write transaction.
+    output wire [C_M_AXI_AWUSER_WIDTH - 1:0] M_AXI_AWUSER,                      //Optional User-defined signal in the write address channel.
+    output wire M_AXI_AWVALID,                                                  //Write address valid. This signal indicates that the channel is signaling valid write address and control information.
+    input  wire M_AXI_AWREADY,                                                  //Write address ready. This signal indicates that the slave is ready to accept an address and associated control signals
+    output wire [C_M_AXI_DATA_WIDTH-1 : 0] M_AXI_WDATA,                         //Master Interface Write Data.
+    output wire [C_M_AXI_DATA_WIDTH/8-1 : 0] M_AXI_WSTRB,                       //Write strobes. This signal indicates which byte lanes hold valid data. There is one write strobe bit for each eight bits of the write data bus.
+    output wire M_AXI_WLAST,                                                    //Write last. This signal indicates the last transfer in a write burst.
+    output wire [C_M_AXI_WUSER_WIDTH-1 : 0] M_AXI_WUSER,                        //Optional User-defined signal in the write data channel.
+    output wire M_AXI_WVALID,                                                   //Write valid. This signal indicates that valid write data and strobes are available
+    input  wire M_AXI_WREADY,                                                   //Write ready. This signal indicates that the slave can accept the write data.
+    input  wire [C_M_AXI_ID_WIDTH-1 : 0] M_AXI_BID,                             //Master Interface Write Response.
+    input  wire [1 : 0] M_AXI_BRESP,                                            //Write response. This signal indicates the status of the write transaction.
+    input  wire [C_M_AXI_BUSER_WIDTH-1 : 0] M_AXI_BUSER,                        //Optional User-defined signal in the write response channel
+    input  wire M_AXI_BVALID,                                                   //Write response valid. This signal indicates that the channel is signaling a valid write response.
+    output wire M_AXI_BREADY,                                                   //Response ready. This signal indicates that the master can accept a write response.
     
-    output wire [C_M_AXI_ID_WIDTH-1 : 0] M_AXI_ARID,                            // Master Interface Read Address.
-    output wire [C_M_AXI_ADDR_WIDTH-1 : 0] M_AXI_ARADDR,                        // Read address. This signal indicates the initial address of a read burst transaction.
-    output wire [7 : 0] M_AXI_ARLEN,                                            // Burst length. The burst length gives the exact number of transfers in a burst
-    output wire [2 : 0] M_AXI_ARSIZE,                                           // Burst size. This signal indicates the size of each transfer in the burst
-    output wire [1 : 0] M_AXI_ARBURST,                                          // Burst type. The burst type and the size information, determine how the address for each transfer within the burst is calculated.
-    output wire  M_AXI_ARLOCK,                                                  // Lock type. Provides additional information about the atomic characteristics of the transfer.
-    output wire [3 : 0] M_AXI_ARCACHE,                                          // Memory type. This signal indicates how transactions are required to progress through a system.
-    output wire [2 : 0] M_AXI_ARPROT,                                           // Protection type. This signal indicates the privilege and security level of the transaction, and whether the transaction is a data access or an instruction access.
-    output wire [3 : 0] M_AXI_ARQOS,                                            // Quality of Service, QoS identifier sent for each read transaction
-    output wire [C_M_AXI_ARUSER_WIDTH-1 : 0] M_AXI_ARUSER,                      // Optional User-defined signal in the read address channel.
-    output wire  M_AXI_ARVALID,                                                 // Write address valid. This signal indicates that the channel is signaling valid read address and control information
-    input  wire M_AXI_ARREADY,                                                  // Read address ready. This signal indicates that the slave is ready to accept an address and associated control signals
-    input  wire [C_M_AXI_ID_WIDTH-1 : 0] M_AXI_RID,                             // Read ID tag. This signal is the identification tag for the read data group of signals generated by the slave.
-    input  wire [C_M_AXI_DATA_WIDTH-1 : 0] M_AXI_RDATA,                         // Master Read Data
-    input  wire [1 : 0] M_AXI_RRESP,                                            // Read response. This signal indicates the status of the read transfer
-    input  wire  M_AXI_RLAST,                                                   // Read last. This signal indicates the last transfer in a read burst
-    input  wire [C_M_AXI_RUSER_WIDTH-1 : 0] M_AXI_RUSER,                        // Optional User-defined signal in the read address channel.
-    input  wire  M_AXI_RVALID,                                                  // Read valid. This signal indicates that the channel is signaling the required read data.
-    output wire  M_AXI_RREADY                                                   // Read ready. This signal indicates that the master can accept the read data and response information.
+    output wire [C_M_AXI_ID_WIDTH-1 : 0] M_AXI_ARID,                            //Master Interface Read Address.
+    output wire [C_M_AXI_ADDR_WIDTH-1 : 0] M_AXI_ARADDR,                        //Read address. This signal indicates the initial address of a read burst transaction.
+    output wire [7 : 0] M_AXI_ARLEN,                                            //Burst length. The burst length gives the exact number of transfers in a burst
+    output wire [2 : 0] M_AXI_ARSIZE,                                           //Burst size. This signal indicates the size of each transfer in the burst
+    output wire [1 : 0] M_AXI_ARBURST,                                          //Burst type. The burst type and the size information, determine how the address for each transfer within the burst is calculated.
+    output wire M_AXI_ARLOCK,                                                   //Lock type. Provides additional information about the atomic characteristics of the transfer.
+    output wire [3 : 0] M_AXI_ARCACHE,                                          //Memory type. This signal indicates how transactions are required to progress through a system.
+    output wire [2 : 0] M_AXI_ARPROT,                                           //Protection type. This signal indicates the privilege and security level of the transaction, and whether the transaction is a data access or an instruction access.
+    output wire [3 : 0] M_AXI_ARQOS,                                            //Quality of Service, QoS identifier sent for each read transaction
+    output wire [C_M_AXI_ARUSER_WIDTH-1 : 0] M_AXI_ARUSER,                      //Optional User-defined signal in the read address channel.
+    output wire M_AXI_ARVALID,                                                  //Write address valid. This signal indicates that the channel is signaling valid read address and control information
+    input  wire M_AXI_ARREADY,                                                  //Read address ready. This signal indicates that the slave is ready to accept an address and associated control signals
+    input  wire [C_M_AXI_ID_WIDTH-1 : 0] M_AXI_RID,                             //Read ID tag. This signal is the identification tag for the read data group of signals generated by the slave.
+    input  wire [C_M_AXI_DATA_WIDTH-1 : 0] M_AXI_RDATA,                         //Master Read Data
+    input  wire [1 : 0] M_AXI_RRESP,                                            //Read response. This signal indicates the status of the read transfer
+    input  wire M_AXI_RLAST,                                                    //Read last. This signal indicates the last transfer in a read burst
+    input  wire [C_M_AXI_RUSER_WIDTH-1 : 0] M_AXI_RUSER,                        //Optional User-defined signal in the read address channel.
+    input  wire M_AXI_RVALID,                                                   //Read valid. This signal indicates that the channel is signaling the required read data.
+    output wire M_AXI_RREADY                                                    //Read ready. This signal indicates that the master can accept the read data and response information.
 );
 
 //Function called clogb2 that returns an integer which has the value of the ceiling of the log base 2
@@ -87,10 +87,10 @@ localparam integer C_MASTER_LENGTH = 12;
 localparam integer C_NO_BURSTS_REQ = C_MASTER_LENGTH-clogb2((C_M_AXI_BURST_LEN*C_M_AXI_DATA_WIDTH/8)-1);
 
 // Example State machine to initialize counter, initialize write transactions,  initialize read transactions and comparison of read data with the written data words.
-localparam [1:0] IDLE         = 2'b00; // This state initiates AXI4Lite transaction after the state machine changes state to INIT_WRITE when there is 0 to 1 transition on INIT_AXI_TXN
-localparam [1:0] INIT_WRITE   = 2'b01; // This state initializes write transaction, once writes are done, the state machine changes state to INIT_READ 
-localparam [1:0] INIT_READ    = 2'b10; // This state initializes read transaction once reads are done, the state machine  changes state to INIT_COMPARE 
-localparam [1:0] INIT_COMPARE = 2'b11; // This state issues the status of comparison of the written data with the read data	
+localparam [1:0] IDLE         = 2'b00; //This state initiates AXI4Lite transaction after the state machine changes state to INIT_WRITE when there is 0 to 1 transition on INIT_AXI_TXN
+localparam [1:0] INIT_WRITE   = 2'b01; //This state initializes write transaction, once writes are done, the state machine changes state to INIT_READ 
+localparam [1:0] INIT_READ    = 2'b10; //This state initializes read transaction once reads are done, the state machine  changes state to INIT_COMPARE 
+localparam [1:0] INIT_COMPARE = 2'b11; //This state issues the status of comparison of the written data with the read data	
 
 reg [1:0] mst_exec_state;
 
@@ -108,6 +108,7 @@ reg axi_rready;
 reg [C_TRANSACTIONS_NUM:0] write_index; //write beat count in a burst
 reg [C_TRANSACTIONS_NUM:0] read_index;  //read beat count in a burst
 wire [C_TRANSACTIONS_NUM + 2: 0] burst_size_bytes; //size of C_M_AXI_BURST_LEN length burst in bytes
+
 //The burst counters are used to track the number of burst transfers of C_M_AXI_BURST_LEN burst length needed to transfer 2^C_MASTER_LENGTH bytes of data.
 reg [C_NO_BURSTS_REQ : 0] write_burst_counter;
 reg [C_NO_BURSTS_REQ : 0] read_burst_counter;
@@ -134,56 +135,50 @@ wire init_txn_pulse;
 
 // I/O Connections assignments
 
-//I/O Connections. Write Address (AW)
-assign M_AXI_AWID = 'b0;
-//The AXI address is a concatenation of the target base address + active offset range
-assign M_AXI_AWADDR = P_TARGET_SLAVE_BASE_ADDR + axi_awaddr;
-//Burst LENgth is number of transaction beats, minus 1
-assign M_AXI_AWLEN= C_M_AXI_BURST_LEN - 1;
-//Size should be C_M_AXI_DATA_WIDTH, in 2^SIZE bytes, otherwise narrow bursts are used
-assign M_AXI_AWSIZE = clogb2((C_M_AXI_DATA_WIDTH / 8) - 1);
-//INCR burst type is usually used, except for keyhole bursts
+//Write Address (AW)
+assign M_AXI_AWID = 'b0;                                                        //The AXI address is a concatenation of the target base address + active offset range
+assign M_AXI_AWADDR = P_TARGET_SLAVE_BASE_ADDR + axi_awaddr;                    //Burst LENgth is number of transaction beats, minus 1
+assign M_AXI_AWLEN= C_M_AXI_BURST_LEN - 1;                                      //Size should be C_M_AXI_DATA_WIDTH, in 2^SIZE bytes, otherwise narrow bursts are used
+assign M_AXI_AWSIZE = clogb2((C_M_AXI_DATA_WIDTH / 8) - 1);                     //INCR burst type is usually used, except for keyhole bursts
 assign M_AXI_AWBURST = 2'b01;
-assign M_AXI_AWLOCK = 1'b0;
-//Update value to 4'b0011 if coherent accesses to be used via the Zynq ACP port. Not Allocated, Modifiable, not Bufferable. Not Bufferable since this example is meant to test memory, not intermediate cache. 
 assign M_AXI_AWCACHE = 4'b0010;
 assign M_AXI_AWPROT = 3'h0;
 assign M_AXI_AWQOS = 4'h0;
 assign M_AXI_AWUSER = 'b1;
 assign M_AXI_AWVALID = axi_awvalid;
+assign M_AXI_AWLOCK = 1'b0;                                                     //Update value to 4'b0011 if coherent accesses to be used via the Zynq ACP port.
+                                                                                //Not Allocated, Modifiable, not Bufferable. Not Bufferable since this example is meant to test memory, not intermediate cache.
+
 //Write Data(W)
-assign M_AXI_WDATA = axi_wdata;
-//All bursts are complete and aligned in this example
+assign M_AXI_WDATA = axi_wdata;                                                 //All bursts are complete and aligned in this example
 assign M_AXI_WSTRB = {(C_M_AXI_DATA_WIDTH / 8){1'b1}};
 assign M_AXI_WLAST = axi_wlast;
 assign M_AXI_WUSER = 'b0;
 assign M_AXI_WVALID = axi_wvalid;
+
 //Write Response (B)
 assign M_AXI_BREADY = axi_bready;
+
 //Read Address (AR)
 assign M_AXI_ARID = 'b0;
-assign M_AXI_ARADDR = P_TARGET_SLAVE_BASE_ADDR + axi_araddr;
-//Burst LENgth is number of transaction beats, minus 1
-assign M_AXI_ARLEN = C_M_AXI_BURST_LEN - 1;
-//Size should be C_M_AXI_DATA_WIDTH, in 2^n bytes, otherwise narrow bursts are used
-assign M_AXI_ARSIZE = clogb2((C_M_AXI_DATA_WIDTH / 8) - 1);
-//INCR burst type is usually used, except for keyhole bursts
+assign M_AXI_ARADDR = P_TARGET_SLAVE_BASE_ADDR + axi_araddr;                    //Burst Length is number of transaction beats, minus 1
+assign M_AXI_ARLEN = C_M_AXI_BURST_LEN - 1;                                     //Size should be C_M_AXI_DATA_WIDTH, in 2^n bytes, otherwise narrow bursts are used
+assign M_AXI_ARSIZE = clogb2((C_M_AXI_DATA_WIDTH / 8) - 1);                     //INCR burst type is usually used, except for keyhole bursts
 assign M_AXI_ARBURST = 2'b01;
-assign M_AXI_ARLOCK = 1'b0;
-//Update value to 4'b0011 if coherent accesses to be used via the Zynq ACP port.
-//Not Allocated, Modifiable, not Bufferable.
-//Not Bufferable since this example is meant to test memory, not intermediate cache. 
 assign M_AXI_ARCACHE = 4'b0010;
 assign M_AXI_ARPROT = 3'h0;
 assign M_AXI_ARQOS = 4'h0;
 assign M_AXI_ARUSER = 'b1;
 assign M_AXI_ARVALID = axi_arvalid;
+assign M_AXI_ARLOCK = 1'b0;                                                     //Update value to 4'b0011 if coherent accesses to be used via the Zynq ACP port. 
+                                                                                //Not Allocated, Modifiable, not Bufferable. Not Bufferable since this example is meant to test memory, not intermediate cache.
+
 //Read and Read Response (R)
 assign M_AXI_RREADY = axi_rready;
+
 //Example design I/O
 assign TXN_DONE = compare_done;
-//Burst size in bytes
-assign burst_size_bytes = C_M_AXI_BURST_LEN * C_M_AXI_DATA_WIDTH / 8;
+assign burst_size_bytes = C_M_AXI_BURST_LEN * C_M_AXI_DATA_WIDTH / 8;           //Burst size in bytes
 assign init_txn_pulse = (!init_txn_ff2) && init_txn_ff;
 
 //Generate a pulse to initiate AXI transaction.
@@ -202,10 +197,10 @@ end
 //Write Address Channel
 //--------------------
 
-// The purpose of the write address channel is to request the address and command information for the entire transaction.  It is a single beat of information.
+//The purpose of the write address channel is to request the address and command information for the entire transaction.  It is a single beat of information.
 
-// The AXI4 Write address channel in this example will continue to initiate write commands as fast as it is allowed by the slave/interconnect.
-// The address will be incremented on each accepted address transaction, by burst_size_byte to point to the next address. 
+//The AXI4 Write address channel in this example will continue to initiate write commands as fast as it is allowed by the slave/interconnect.
+//The address will be incremented on each accepted address transaction, by burst_size_byte to point to the next address. 
 always @(posedge M_AXI_ACLK) begin
     if (M_AXI_ARESETN == 0 || init_txn_pulse == 1'b1 ) begin
         axi_awvalid <= 1'b0;
@@ -456,7 +451,7 @@ end
 // -Writes wait when a not read + active data burst count pass 
 // a parameterized threshold
 
- // write_burst_counter counter keeps track with the number of burst transaction initiated against the number of burst transactions the master needs to initiate
+//write_burst_counter counter keeps track with the number of burst transaction initiated against the number of burst transactions the master needs to initiate
 always @(posedge M_AXI_ACLK) begin
     if (M_AXI_ARESETN == 0 || init_txn_pulse == 1'b1 ) begin
         write_burst_counter <= 'b0;
@@ -469,8 +464,7 @@ always @(posedge M_AXI_ACLK) begin
         write_burst_counter <= write_burst_counter;
 end
 
-// read_burst_counter counter keeps track with the number of burst transaction initiated                   
-// against the number of burst transactions the master needs to initiate                                   
+//read_burst_counter counter keeps track with the number of burst transaction initiated against the number of burst transactions the master needs to initiate
 always @(posedge M_AXI_ACLK) begin
     if (M_AXI_ARESETN == 0 || init_txn_pulse == 1'b1) begin
         read_burst_counter <= 'b0;
@@ -484,7 +478,7 @@ always @(posedge M_AXI_ACLK) begin
     end
 end
 
-//implement master command interface state machine                                                        
+//implement master command interface state machine
 always @ ( posedge M_AXI_ACLK) begin
     if (M_AXI_ARESETN == 1'b0 ) begin
         // reset condition
@@ -539,7 +533,7 @@ always @ ( posedge M_AXI_ACLK) begin
             INIT_COMPARE: begin
                 // This state is responsible to issue the state of comparison
                 // of written data with the read data. If no error flags are set,
-                // compare_done signal will be asseted to indicate success.
+                // compare_done signal will be asserted to indicate success.
                 //if (~error_reg)
                 ERROR <= error_reg;
                 mst_exec_state <= IDLE;
