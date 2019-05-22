@@ -39,7 +39,7 @@ startgroup
 set_property -dict [list CONFIG.C0.DDR4_TimePeriod {833}] [get_bd_cells ddr4_0]
 set_property -dict [list CONFIG.C0.DDR4_CustomParts [lindex [get_files */BLS4G4S26BFSD.csv] 0] CONFIG.C0.DDR4_isCustom {true}] [get_bd_cells ddr4_0]
 set_property -dict [list CONFIG.C0.DDR4_MemoryType {SODIMMs} CONFIG.C0.DDR4_MemoryPart {BLS4G4S26BFSD-2400} CONFIG.C0.DDR4_DataWidth {64} CONFIG.C0.DDR4_AxiDataWidth {256} CONFIG.C0.DDR4_AxiAddressWidth {32}] [get_bd_cells ddr4_0]
-set_property -dict [list CONFIG.C0.DDR4_InputClockPeriod {3332}] [get_bd_cells ddr4_0]
+set_property -dict [list CONFIG.C0.DDR4_InputClockPeriod {9996}] [get_bd_cells ddr4_0]
 set_property -dict [list CONFIG.C0.DDR4_AxiNarrowBurst.VALUE_SRC USER] [get_bd_cells ddr4_0]
 set_property -dict [list CONFIG.C0.DDR4_AxiNarrowBurst {false}] [get_bd_cells ddr4_0]
 set_property -dict [list CONFIG.C0.DDR4_AxiIDWidth.VALUE_SRC USER] [get_bd_cells ddr4_0]
@@ -64,6 +64,20 @@ set_property -dict [list CONFIG.NUM_WRITE_OUTSTANDING {64} CONFIG.NUM_READ_OUTST
 make_bd_pins_external  [get_bd_pins ddr4_0/c0_ddr4_aresetn]
 set_property name reset [get_bd_ports c0_ddr4_aresetn_0]
 
+set_property -dict [list CONFIG.FREQ_HZ {100000000}] [get_bd_intf_ports clock]
+set_property -dict [list CONFIG.FREQ_HZ {100000000}] [get_bd_intf_ports axi4]
+
+endgroup
+
+startgroup
+create_bd_cell -type ip -vlnv xilinx.com:ip:axi_protocol_checker:2.0 axi_protocol_checker_0
+connect_bd_intf_net [get_bd_intf_pins axi_protocol_checker_0/PC_AXI] [get_bd_intf_pins ddr4_0/C0_DDR4_S_AXI]
+
+make_bd_pins_external  [get_bd_pins axi_protocol_checker_0/pc_status]
+set_property name pc_status [get_bd_ports pc_status_0]
+
+make_bd_pins_external  [get_bd_pins axi_protocol_checker_0/pc_asserted]
+set_property name pc_asserted [get_bd_ports pc_asserted_0]
 endgroup
 
 #assign_bd_address
