@@ -6,16 +6,14 @@ import bd_axi_vip_0_0_pkg::*;
 
 module tb_axi4_master();
 
+parameter CLK_HALF_PERIOD = 5;
+parameter CLK_PERIOD = 2 * CLK_HALF_PERIOD;
+
 parameter P_TARGET_SLAVE_BASE_ADDR = 32'h10000000;
 parameter integer P_BURST_LEN    = 16;
 parameter integer P_ID_WIDTH     = 1;
 parameter integer P_ADDR_WIDTH   = 32;
 parameter integer P_DATA_WIDTH   = 32;
-parameter integer P_AWUSER_WIDTH = 1;
-parameter integer P_ARUSER_WIDTH = 1;
-parameter integer P_WUSER_WIDTH  = 1;
-parameter integer P_RUSER_WIDTH  = 1;
-parameter integer P_BUSER_WIDTH  = 1;
 
 bit                      tb_clock;
 bit                      tb_reset;
@@ -52,119 +50,114 @@ bit                      tb_error;
 bit                      tb_asserted;
 bit [159:0]              tb_status;
 
-reg [P_ID_WIDTH - 1:0] tb_awid;
-reg [P_ADDR_WIDTH - 1:0] tb_awaddr;
-reg [P_DATA_WIDTH - 1:0] tb_wdata;
-reg [P_DATA_WIDTH/8-1:0] tb_wstrb;
-reg [1:0] tb_awburst;
-reg [2:0] tb_awsize;
-reg [3:0] tb_awcache;
-reg [7:0] tb_awlen;
-reg [0:0] tb_awlock;
-reg [2:0] tb_awprot;
-reg [3:0] tb_awqos;
-reg tb_awvalid;
-reg tb_wvalid;
-reg tb_wlast;
+wire [P_ID_WIDTH - 1:0] tb_awid;
+wire [P_ADDR_WIDTH - 1:0] tb_awaddr;
+wire [P_DATA_WIDTH - 1:0] tb_wdata;
+wire [P_DATA_WIDTH/8-1:0] tb_wstrb;
+wire [1:0] tb_awburst;
+wire [2:0] tb_awsize;
+wire [3:0] tb_awcache;
+wire [7:0] tb_awlen;
+wire [0:0] tb_awlock;
+wire [2:0] tb_awprot;
+wire [3:0] tb_awqos;
+wire tb_awvalid;
+wire tb_wvalid;
+wire tb_wlast;
 wire tb_awready;
 wire tb_wready;
 
-reg tb_bready;  
+wire tb_bready;  
 wire [P_ID_WIDTH - 1:0] tb_bid;
 wire [1:0] tb_bresp;
 wire tb_bvalid;
 
-reg tb_arvalid;
-reg [P_ADDR_WIDTH - 1:0] tb_araddr;
-reg [1:0] tb_arburst;
-reg [2:0] tb_arsize;
-reg [3:0] tb_arcache;
-reg [0:0] tb_arid;
-reg [7:0] tb_arlen;
-reg [0:0] tb_arlock;
-reg [2:0] tb_arprot;
-reg [3:0] tb_arqos;
+wire tb_arvalid;
+wire [P_ADDR_WIDTH - 1:0] tb_araddr;
+wire [1:0] tb_arburst;
+wire [2:0] tb_arsize;
+wire [3:0] tb_arcache;
+wire [0:0] tb_arid;
+wire [7:0] tb_arlen;
+wire [0:0] tb_arlock;
+wire [2:0] tb_arprot;
+wire [3:0] tb_arqos;
 
 wire tb_arready;
 wire [P_DATA_WIDTH-1:0] tb_rdata;
 wire [P_ID_WIDTH - 1:0] tb_rid;
 wire tb_rlast;
-reg tb_rready;
+wire tb_rready;
 wire [1:0] tb_rresp;
 wire tb_rvalid;
 
-reg [P_AWUSER_WIDTH-1:0] tb_awuser;
-reg [P_WUSER_WIDTH-1:0] tb_wuser;
-reg [P_ARUSER_WIDTH-1:0] tb_aruser;
-wire [P_RUSER_WIDTH-1:0] tb_ruser;
-wire [P_BUSER_WIDTH-1:0] tb_buser;
+reg  [P_ADDR_WIDTH - 1:0] tb_write_addr = 0;
+reg  [P_DATA_WIDTH - 1:0] tb_write_data = 0;
+reg  tb_write_start = 0;
+wire tb_write_ready;
+wire tb_write_done;
+wire tb_write_err;
 
 bd_axi_vip_0_0_slv_mem_t slv_agent_0;
 
-axi4_master_v1_0_M00_AXI #
+//axi4_master_v1_0_M00_AXI #
+axi4_master #
 (
-    .C_M_TARGET_SLAVE_BASE_ADDR(P_TARGET_SLAVE_BASE_ADDR),
-    .C_M_AXI_BURST_LEN(P_BURST_LEN),
-    .C_M_AXI_ID_WIDTH(P_ID_WIDTH),
-	.C_M_AXI_ADDR_WIDTH(P_ADDR_WIDTH),
-    .C_M_AXI_DATA_WIDTH(P_DATA_WIDTH),
-    .C_M_AXI_AWUSER_WIDTH(P_AWUSER_WIDTH),
-    .C_M_AXI_ARUSER_WIDTH(P_ARUSER_WIDTH),
-    .C_M_AXI_WUSER_WIDTH(P_WUSER_WIDTH),
-    .C_M_AXI_RUSER_WIDTH(P_RUSER_WIDTH),
-    .C_M_AXI_BUSER_WIDTH(P_BUSER_WIDTH)
+    .P_TARGET_SLAVE_BASE_ADDR(P_TARGET_SLAVE_BASE_ADDR),
+    .P_BURST_LEN(P_BURST_LEN),
+    .P_ID_WIDTH(P_ID_WIDTH),
+	.P_ADDR_WIDTH(P_ADDR_WIDTH),
+    .P_DATA_WIDTH(P_DATA_WIDTH)
 )
 axi4_master_i
 (
-    .INIT_AXI_TXN(tb_init),
-    .TXN_DONE(tb_done),
-    .ERROR(tb_error),
+    .WRITE_ADDR(tb_write_addr),
+    .WRITE_DATA(tb_write_data),
+    .WRITE_START(tb_write_start),
+    .WRITE_READY(tb_write_ready),
+    .WRITE_DONE(tb_write_done),
+    .WRITE_ERROR(tb_write_err),    
     
-    .M_AXI_ACLK(tb_clock),
-    .M_AXI_ARESETN(tb_reset),
+    .CLOCK(tb_clock),
+    .RESET(tb_reset),
     
-    .M_AXI_AWID(tb_awid),
-    .M_AXI_AWADDR(tb_awaddr),
-    .M_AXI_AWLEN(tb_awlen),
-    .M_AXI_AWSIZE(tb_awsize),
-    .M_AXI_AWBURST(tb_awburst),
-    .M_AXI_AWLOCK(tb_awlock),
-    .M_AXI_AWCACHE(tb_awcache),
-    .M_AXI_AWPROT(tb_awprot),
-    .M_AXI_AWQOS(tb_awqos),
-    .M_AXI_AWUSER(tb_awuser),
-    .M_AXI_AWVALID(tb_awvalid),
-    .M_AXI_AWREADY(tb_awready),
-    .M_AXI_WDATA(tb_wdata),
-    .M_AXI_WSTRB(tb_wstrb),
-    .M_AXI_WLAST(tb_wlast),
-    .M_AXI_WUSER(tb_wuser),
-    .M_AXI_WVALID(tb_wvalid),
-    .M_AXI_WREADY(tb_wready),
-    .M_AXI_BID(tb_bid),
-    .M_AXI_BRESP(tb_bresp),
-    .M_AXI_BUSER(tb_buser),
-    .M_AXI_BVALID(tb_bvalid),
-    .M_AXI_BREADY(tb_bready),
-    .M_AXI_ARID(tb_arid),
-    .M_AXI_ARADDR(tb_araddr),
-    .M_AXI_ARLEN(tb_arlen),
-    .M_AXI_ARSIZE(tb_arsize),
-    .M_AXI_ARBURST(tb_arburst),
-    .M_AXI_ARLOCK(tb_arlock),
-    .M_AXI_ARCACHE(tb_arcache),
-    .M_AXI_ARPROT(tb_arprot),
-    .M_AXI_ARQOS(tb_arqos),
-    .M_AXI_ARUSER(tb_aruser),
-    .M_AXI_ARVALID(tb_arvalid),
-    .M_AXI_ARREADY(tb_arready),
-    .M_AXI_RID(tb_rid),
-    .M_AXI_RDATA(tb_rdata),
-    .M_AXI_RRESP(tb_rresp),
-    .M_AXI_RLAST(tb_rlast),
-    .M_AXI_RUSER(tb_ruser),
-    .M_AXI_RVALID(tb_rvalid),
-    .M_AXI_RREADY(tb_rready)
+    .AWID(tb_awid),
+    .AWADDR(tb_awaddr),
+    .AWLEN(tb_awlen),
+    .AWSIZE(tb_awsize),
+    .AWBURST(tb_awburst),
+    .AWLOCK(tb_awlock),
+    .AWCACHE(tb_awcache),
+    .AWPROT(tb_awprot),
+    .AWQOS(tb_awqos),
+    .AWVALID(tb_awvalid),
+    .AWREADY(tb_awready),
+    .WDATA(tb_wdata),
+    .WSTRB(tb_wstrb),
+    .WLAST(tb_wlast),
+    .WVALID(tb_wvalid),
+    .WREADY(tb_wready),
+    .BID(tb_bid),
+    .BRESP(tb_bresp),
+    .BVALID(tb_bvalid),
+    .BREADY(tb_bready),
+    .ARID(tb_arid),
+    .ARADDR(tb_araddr),
+    .ARLEN(tb_arlen),
+    .ARSIZE(tb_arsize),
+    .ARBURST(tb_arburst),
+    .ARLOCK(tb_arlock),
+    .ARCACHE(tb_arcache),
+    .ARPROT(tb_arprot),
+    .ARQOS(tb_arqos),
+    .ARVALID(tb_arvalid),
+    .ARREADY(tb_arready),
+    .RID(tb_rid),
+    .RDATA(tb_rdata),
+    .RRESP(tb_rresp),
+    .RLAST(tb_rlast),
+    .RVALID(tb_rvalid),
+    .RREADY(tb_rready)
 );
 
 bd_wrapper BD_WRAPPER
@@ -180,7 +173,6 @@ bd_wrapper BD_WRAPPER
     .S_AXI_arprot(tb_arprot),
     .S_AXI_arqos(tb_arqos),
     .S_AXI_arready(tb_arready),
-    //.S_AXI_aruser(tb_aruser),
     .S_AXI_arvalid(tb_arvalid),
     .S_AXI_awaddr(tb_awaddr),
     .S_AXI_awburst(tb_awburst),
@@ -191,25 +183,21 @@ bd_wrapper BD_WRAPPER
     .S_AXI_awprot(tb_awprot),
     .S_AXI_awqos(tb_awqos),
     .S_AXI_awready(tb_awready),
-    //.S_AXI_awuser(tb_awuser),
     .S_AXI_awvalid(tb_awvalid),
     .S_AXI_bid(tb_bid),
     .S_AXI_bready(tb_bready),
     .S_AXI_bresp(tb_bresp),
-    //.S_AXI_buser(tb_buser),
     .S_AXI_bvalid(tb_bvalid),
     .S_AXI_rdata(tb_rdata),
     .S_AXI_rid(tb_rid),
     .S_AXI_rlast(tb_rlast),
     .S_AXI_rready(tb_rready),
     .S_AXI_rresp(tb_rresp),
-    //.S_AXI_ruser(tb_ruser),
     .S_AXI_rvalid(tb_rvalid),
     .S_AXI_wdata(tb_wdata),
     .S_AXI_wlast(tb_wlast),
     .S_AXI_wready(tb_wready),
     .S_AXI_wstrb(tb_wstrb),
-    //.S_AXI_wuser(tb_wuser),
     .S_AXI_wvalid(tb_wvalid),    
     .PC_ASSERTED(tb_asserted),
     .PC_STATUS(tb_status)
@@ -224,28 +212,42 @@ initial begin
     $timeformat (-12, 1, " ps", 1);
 end
 
-initial begin
-    tb_reset = 0;
-    #200ns;
-    tb_reset = 1;
-    repeat (5) @(negedge tb_clock); 
+always begin
+    #CLK_HALF_PERIOD tb_clock = !tb_clock;
 end
 
 initial begin
-    tb_init = 0;
-    #300ns;
-    tb_init = 1;
-    #20ns;
-    tb_init = 0;
-    $display("EXAMPLE TEST M00_AXI:");
-    wait (tb_done == 1'b1);
-    $display("M00_AXI: PTGEN_TEST_FINISHED!");
-    if (tb_error) begin
-        $display("PTGEN_TEST: FAILED!");
+    tb_reset = 0;
+    tb_clock = 1;
+
+    #(32 * CLK_PERIOD);
+    tb_reset = 1;
+    //tb_init = 0;
+    tb_write_start = 0; 
+    tb_write_addr = 0;
+    tb_write_data = 0;
+    
+    #(8 * CLK_PERIOD);
+    //tb_init = 1;
+    tb_write_start = 1; 
+    tb_write_addr = 'h01;
+    tb_write_data = 'hF1;
+    
+    #(1 * CLK_PERIOD);
+    tb_write_start = 0; 
+    tb_write_addr = 0;
+    tb_write_data = 0;
+    
+    $display("TEST AXI4_MASTER:");
+    wait (tb_write_done == 1'b1);
+    $display("AXI4_MASTER: FINISHED!");
+    if (tb_write_err) begin
+        $display("TEST FAILED!");
     end else begin
-        $display("PTGEN_TEST: PASSED!");
+        $display("TEST PASSED!");
     end
-    #100ns;
+    
+    #(10 * CLK_PERIOD);
     $finish;
 end
 
@@ -257,7 +259,5 @@ initial begin
         slave_moniter_transaction_queue_size++;
     end
 end
-
-always #5 tb_clock = !tb_clock;
 
 endmodule
