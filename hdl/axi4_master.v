@@ -6,7 +6,7 @@ module axi4_master #
     parameter P_TARGET_SLAVE_BASE_ADDR     = 64'h0,                             //Base address of targeted slave
     
     parameter integer P_WRITE_BURSTS = 1,                                       //Burst Length. Supports 1, 2, 4, 8, 16, 32, 64, 128, 256 burst lengths
-	parameter integer P_READ_BURSTS  = 16,                                      //Burst Length. Supports 1, 2, 4, 8, 16, 32, 64, 128, 256 burst lengths
+    parameter integer P_READ_BURSTS  = 16,                                      //Burst Length. Supports 1, 2, 4, 8, 16, 32, 64, 128, 256 burst lengths
     parameter integer P_ID_WIDTH     = 4,                                       //Thread ID Width
     parameter integer P_ADDR_WIDTH   = 64,                                      //Width of Address Bus
     parameter integer P_DATA_WIDTH   = 256                                      //Width of Data Bus
@@ -251,6 +251,7 @@ end
     end
 end
 
+//Need this to silent VIP warning
 always @(posedge CLOCK) begin
     if (RESET == 0) begin
         m_arvalid <= 0;
@@ -259,6 +260,7 @@ always @(posedge CLOCK) begin
     end
 end
 
+//Need this to silent VIP warning
 always @(posedge CLOCK) begin
     if (RESET == 0) begin
         m_rready <= 0;
