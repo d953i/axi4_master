@@ -1,2 +1,2 @@
 # axi4_master
-Custom axi4 master
+Experimental axi4 master. Uncomplete.
