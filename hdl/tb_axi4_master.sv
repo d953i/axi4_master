@@ -10,10 +10,11 @@ parameter CLK_HALF_PERIOD = 5;
 parameter CLK_PERIOD = 2 * CLK_HALF_PERIOD;
 
 parameter P_TARGET_SLAVE_BASE_ADDR = 32'h10000000;
-parameter integer P_BURST_LEN    = 16;
-parameter integer P_ID_WIDTH     = 4;
-parameter integer P_ADDR_WIDTH   = 32;
-parameter integer P_DATA_WIDTH   = 32;
+parameter integer P_WRITE_BURSTS   = 1;
+parameter integer P_READ_BURSTS    = 16;
+parameter integer P_ID_WIDTH       = 4;
+parameter integer P_ADDR_WIDTH     = 32;
+parameter integer P_DATA_WIDTH     = 32;
 
 bit                      tb_clock;
 bit                      tb_reset;
@@ -104,7 +105,8 @@ bd_axi_vip_0_0_slv_mem_t slv_agent_0;
 axi4_master #
 (
     .P_TARGET_SLAVE_BASE_ADDR(P_TARGET_SLAVE_BASE_ADDR),
-    .P_BURST_LEN(P_BURST_LEN),
+    .P_WRITE_BURSTS(P_WRITE_BURSTS),
+    .P_READ_BURSTS(P_READ_BURSTS),
     .P_ID_WIDTH(P_ID_WIDTH),
 	.P_ADDR_WIDTH(P_ADDR_WIDTH),
     .P_DATA_WIDTH(P_DATA_WIDTH)
@@ -164,22 +166,22 @@ bd_wrapper BD_WRAPPER
 (
     .CLOCK(tb_clock),
     .RESET(tb_reset),
-    .S_AXI_araddr(tb_araddr),
-    .S_AXI_arburst(tb_arburst),
-    .S_AXI_arcache(tb_arcache),
-    .S_AXI_arid(tb_arid),
-    .S_AXI_arlen(tb_arlen),
-    .S_AXI_arlock(tb_arlock),
-    .S_AXI_arprot(tb_arprot),
-    .S_AXI_arqos(tb_arqos),
-    .S_AXI_arready(tb_arready),
-    .S_AXI_arvalid(tb_arvalid),
+    //.S_AXI_araddr(tb_araddr),
+    //.S_AXI_arburst(tb_arburst),
+    //.S_AXI_arcache(tb_arcache),
+    //.S_AXI_arid(tb_arid),
+    //.S_AXI_arlen(tb_arlen),
+    //.S_AXI_arlock(tb_arlock),
+    //.S_AXI_arprot(tb_arprot),
+    //.S_AXI_arqos(tb_arqos),
+    //.S_AXI_arready(tb_arready),
+    //.S_AXI_arvalid(tb_arvalid),
     .S_AXI_awaddr(tb_awaddr),
     .S_AXI_awburst(tb_awburst),
     .S_AXI_awcache(tb_awcache),
     .S_AXI_awid(tb_awid),
     .S_AXI_awlen(tb_awlen),
-    .S_AXI_awlock(tb_awlock),
+    //.S_AXI_awlock(tb_awlock),
     .S_AXI_awprot(tb_awprot),
     .S_AXI_awqos(tb_awqos),
     .S_AXI_awready(tb_awready),
@@ -188,12 +190,12 @@ bd_wrapper BD_WRAPPER
     .S_AXI_bready(tb_bready),
     .S_AXI_bresp(tb_bresp),
     .S_AXI_bvalid(tb_bvalid),
-    .S_AXI_rdata(tb_rdata),
-    .S_AXI_rid(tb_rid),
-    .S_AXI_rlast(tb_rlast),
-    .S_AXI_rready(tb_rready),
-    .S_AXI_rresp(tb_rresp),
-    .S_AXI_rvalid(tb_rvalid),
+    //.S_AXI_rdata(tb_rdata),
+    //.S_AXI_rid(tb_rid),
+    //.S_AXI_rlast(tb_rlast),
+    //.S_AXI_rready(tb_rready),
+    //.S_AXI_rresp(tb_rresp),
+    //.S_AXI_rvalid(tb_rvalid),
     .S_AXI_wdata(tb_wdata),
     .S_AXI_wlast(tb_wlast),
     .S_AXI_wready(tb_wready),
