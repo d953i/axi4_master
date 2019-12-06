@@ -250,7 +250,7 @@ initial begin
     
     #(1 * CLK_PERIOD);
     tb_write_start = 1; 
-    tb_write_addr = 'h04;
+    tb_write_addr = 'h20;
     tb_write_data = 'hF2;
     
     #(1 * CLK_PERIOD);
