@@ -18,6 +18,9 @@ if {[file exists "$ProjectFolder"]} {
     file delete -force $ProjectFolder
 }
 
+set scriptPath [file dirname [file normalize [info script]]]
+set sourceRoot [join [lrange [file split [file dirname [info script]]] 0 end-1] "/"]
+
 create_project $ProjectName ./$ProjectName -part xczu7ev-ffvc1156-2-e
 set_property board_part xilinx.com:zcu104:part0:1.1 [current_project]
 
@@ -72,6 +75,7 @@ save_bd_design
 make_wrapper -files [get_files ./$ProjectName/$ProjectName.srcs/sources_1/bd/bd/bd.bd] -top
 add_files -norecurse ./$ProjectName/$ProjectName.srcs/sources_1/bd/bd/hdl/bd_wrapper.v
 
-add_files -norecurse -scan_for_includes ./hdl/axi4_master_orig.v
-add_files -fileset sim_1 -norecurse -scan_for_includes ./hdl/tb_axi4_master.sv
+add_files -norecurse -scan_for_includes $sourceRoot/hdl/axi4_master.v
+add_files -fileset sim_1 -norecurse -scan_for_includes $sourceRoot/hdl/tb_axi4_master.sv
 update_compile_order -fileset sources_1
+
