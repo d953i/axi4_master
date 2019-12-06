@@ -13,9 +13,9 @@ parameter CLK_PERIOD = 2 * CLK_HALF_PERIOD;
 parameter P_TARGET_SLAVE_BASE_ADDR = 32'h10000000;
 parameter integer P_WRITE_BURSTS   = 1;
 parameter integer P_READ_BURSTS    = 16;
-parameter integer P_ID_WIDTH       = 4;
+parameter integer P_ID_WIDTH       = 6;
 parameter integer P_ADDR_WIDTH     = 32;
-parameter integer P_DATA_WIDTH     = 32;
+parameter integer P_DATA_WIDTH     = 256;
 
 bit                      tb_clock;
 bit                      tb_reset;
