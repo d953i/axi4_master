@@ -184,10 +184,10 @@ always @(posedge CLOCK) begin
         m_awvalid <= 0;
     end else if (WRITE_START) begin
         m_awvalid <= 1;
-        m_writer_counter <= m_writer_counter + 1;
+        //m_writer_counter <= m_writer_counter + 1;
     end else if (AWREADY && m_awvalid) begin                                    //Once asserted, VALIDs cannot be de-asserted, so m_awvalid must wait until transaction is accepted
         m_awvalid <= 0;
-        m_writer_counter <= m_writer_counter - 1;
+        //m_writer_counter <= m_writer_counter - 1;
     end else begin
         m_awvalid <= m_awvalid;
     end
