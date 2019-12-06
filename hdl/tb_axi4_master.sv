@@ -102,109 +102,123 @@ wire tb_write_err;
 
 bd_axi_vip_0_0_slv_mem_t slv_agent_0;
 
-//axi4_master_v1_0_M00_AXI #
-axi4_master #
-(
-    .P_TARGET_SLAVE_BASE_ADDR(P_TARGET_SLAVE_BASE_ADDR),
-    .P_WRITE_BURSTS(P_WRITE_BURSTS),
-    .P_READ_BURSTS(P_READ_BURSTS),
-    .P_ID_WIDTH(P_ID_WIDTH),
-	.P_ADDR_WIDTH(P_ADDR_WIDTH),
-    .P_DATA_WIDTH(P_DATA_WIDTH)
-)
-axi4_master_i
-(
-    .WRITE_ADDR(tb_write_addr),
-    .WRITE_DATA(tb_write_data),
-    .WRITE_START(tb_write_start),
-    .WRITE_READY(tb_write_ready),
-    .WRITE_DONE(tb_write_done),
-    .WRITE_ERROR(tb_write_err),    
-    
-    .CLOCK(tb_clock),
-    .RESET(tb_reset),
-    
-    .AWID(tb_awid),
-    .AWADDR(tb_awaddr),
-    .AWLEN(tb_awlen),
-    .AWSIZE(tb_awsize),
-    .AWBURST(tb_awburst),
-    .AWLOCK(tb_awlock),
-    .AWCACHE(tb_awcache),
-    .AWPROT(tb_awprot),
-    .AWQOS(tb_awqos),
-    .AWVALID(tb_awvalid),
-    .AWREADY(tb_awready),
-    .WDATA(tb_wdata),
-    .WSTRB(tb_wstrb),
-    .WLAST(tb_wlast),
-    .WVALID(tb_wvalid),
-    .WREADY(tb_wready),
-    .BID(tb_bid),
-    .BRESP(tb_bresp),
-    .BVALID(tb_bvalid),
-    .BREADY(tb_bready),
-    .ARID(tb_arid),
-    .ARADDR(tb_araddr),
-    .ARLEN(tb_arlen),
-    .ARSIZE(tb_arsize),
-    .ARBURST(tb_arburst),
-    .ARLOCK(tb_arlock),
-    .ARCACHE(tb_arcache),
-    .ARPROT(tb_arprot),
-    .ARQOS(tb_arqos),
-    .ARVALID(tb_arvalid),
-    .ARREADY(tb_arready),
-    .RID(tb_rid),
-    .RDATA(tb_rdata),
-    .RRESP(tb_rresp),
-    .RLAST(tb_rlast),
-    .RVALID(tb_rvalid),
-    .RREADY(tb_rready)
-);
-
 bd_wrapper BD_WRAPPER
 (
     .CLOCK(tb_clock),
     .RESET(tb_reset),
-    .S_AXI_araddr(tb_araddr),
-    .S_AXI_arburst(tb_arburst),
-    .S_AXI_arcache(tb_arcache),
-    .S_AXI_arid(tb_arid),
-    .S_AXI_arlen(tb_arlen),
-    .S_AXI_arlock(tb_arlock),
-    .S_AXI_arprot(tb_arprot),
-    .S_AXI_arqos(tb_arqos),
-    .S_AXI_arready(tb_arready),
-    .S_AXI_arvalid(tb_arvalid),
-    .S_AXI_awaddr(tb_awaddr),
-    .S_AXI_awburst(tb_awburst),
-    .S_AXI_awcache(tb_awcache),
-    .S_AXI_awid(tb_awid),
-    .S_AXI_awlen(tb_awlen),
-    .S_AXI_awlock(tb_awlock),
-    .S_AXI_awprot(tb_awprot),
-    .S_AXI_awqos(tb_awqos),
-    .S_AXI_awready(tb_awready),
-    .S_AXI_awvalid(tb_awvalid),
-    .S_AXI_bid(tb_bid),
-    .S_AXI_bready(tb_bready),
-    .S_AXI_bresp(tb_bresp),
-    .S_AXI_bvalid(tb_bvalid),
-    .S_AXI_rdata(tb_rdata),
-    .S_AXI_rid(tb_rid),
-    .S_AXI_rlast(tb_rlast),
-    .S_AXI_rready(tb_rready),
-    .S_AXI_rresp(tb_rresp),
-    .S_AXI_rvalid(tb_rvalid),
-    .S_AXI_wdata(tb_wdata),
-    .S_AXI_wlast(tb_wlast),
-    .S_AXI_wready(tb_wready),
-    .S_AXI_wstrb(tb_wstrb),
-    .S_AXI_wvalid(tb_wvalid),    
     .PC_ASSERTED(tb_asserted),
-    .PC_STATUS(tb_status)
-); 
+    .PC_STATUS(tb_status),
+    .WRITE_START(tb_write_start),
+    .WRITE_ADDR(tb_write_addr),
+    .WRITE_DATA(tb_write_data),
+    .WRITE_DONE(tb_write_done),
+    .WRITE_ERROR(tb_write_err),
+    .WRITE_READY(tb_write_ready)
+);
+
+////axi4_master_v1_0_M00_AXI #
+//axi4_master #
+//(
+//    .P_TARGET_SLAVE_BASE_ADDR(P_TARGET_SLAVE_BASE_ADDR),
+//    .P_WRITE_BURSTS(P_WRITE_BURSTS),
+//    .P_READ_BURSTS(P_READ_BURSTS),
+//    .P_ID_WIDTH(P_ID_WIDTH),
+//	  .P_ADDR_WIDTH(P_ADDR_WIDTH),
+//    .P_DATA_WIDTH(P_DATA_WIDTH)
+//)
+//axi4_master_i
+//(
+//    .WRITE_ADDR(tb_write_addr),
+//    .WRITE_DATA(tb_write_data),
+//    .WRITE_START(tb_write_start),
+//    .WRITE_READY(tb_write_ready),
+//    .WRITE_DONE(tb_write_done),
+//    .WRITE_ERROR(tb_write_err),    
+    
+//    .CLOCK(tb_clock),
+//    .RESET(tb_reset),
+    
+//    .AWID(tb_awid),
+//    .AWADDR(tb_awaddr),
+//    .AWLEN(tb_awlen),
+//    .AWSIZE(tb_awsize),
+//    .AWBURST(tb_awburst),
+//    .AWLOCK(tb_awlock),
+//    .AWCACHE(tb_awcache),
+//    .AWPROT(tb_awprot),
+//    .AWQOS(tb_awqos),
+//    .AWVALID(tb_awvalid),
+//    .AWREADY(tb_awready),
+//    .WDATA(tb_wdata),
+//    .WSTRB(tb_wstrb),
+//    .WLAST(tb_wlast),
+//    .WVALID(tb_wvalid),
+//    .WREADY(tb_wready),
+//    .BID(tb_bid),
+//    .BRESP(tb_bresp),
+//    .BVALID(tb_bvalid),
+//    .BREADY(tb_bready),
+//    .ARID(tb_arid),
+//    .ARADDR(tb_araddr),
+//    .ARLEN(tb_arlen),
+//    .ARSIZE(tb_arsize),
+//    .ARBURST(tb_arburst),
+//    .ARLOCK(tb_arlock),
+//    .ARCACHE(tb_arcache),
+//    .ARPROT(tb_arprot),
+//    .ARQOS(tb_arqos),
+//    .ARVALID(tb_arvalid),
+//    .ARREADY(tb_arready),
+//    .RID(tb_rid),
+//    .RDATA(tb_rdata),
+//    .RRESP(tb_rresp),
+//    .RLAST(tb_rlast),
+//    .RVALID(tb_rvalid),
+//    .RREADY(tb_rready)
+//);
+
+//bd_wrapper BD_WRAPPER
+//(
+//    .CLOCK(tb_clock),
+//    .RESET(tb_reset),
+//    .S_AXI_araddr(tb_araddr),
+//    .S_AXI_arburst(tb_arburst),
+//    .S_AXI_arcache(tb_arcache),
+//    .S_AXI_arid(tb_arid),
+//    .S_AXI_arlen(tb_arlen),
+//    .S_AXI_arlock(tb_arlock),
+//    .S_AXI_arprot(tb_arprot),
+//    .S_AXI_arqos(tb_arqos),
+//    .S_AXI_arready(tb_arready),
+//    .S_AXI_arvalid(tb_arvalid),
+//    .S_AXI_awaddr(tb_awaddr),
+//    .S_AXI_awburst(tb_awburst),
+//    .S_AXI_awcache(tb_awcache),
+//    .S_AXI_awid(tb_awid),
+//    .S_AXI_awlen(tb_awlen),
+//    .S_AXI_awlock(tb_awlock),
+//    .S_AXI_awprot(tb_awprot),
+//    .S_AXI_awqos(tb_awqos),
+//    .S_AXI_awready(tb_awready),
+//    .S_AXI_awvalid(tb_awvalid),
+//    .S_AXI_bid(tb_bid),
+//    .S_AXI_bready(tb_bready),
+//    .S_AXI_bresp(tb_bresp),
+//    .S_AXI_bvalid(tb_bvalid),
+//    .S_AXI_rdata(tb_rdata),
+//    .S_AXI_rid(tb_rid),
+//    .S_AXI_rlast(tb_rlast),
+//    .S_AXI_rready(tb_rready),
+//    .S_AXI_rresp(tb_rresp),
+//    .S_AXI_rvalid(tb_rvalid),
+//    .S_AXI_wdata(tb_wdata),
+//    .S_AXI_wlast(tb_wlast),
+//    .S_AXI_wready(tb_wready),
+//    .S_AXI_wstrb(tb_wstrb),
+//    .S_AXI_wvalid(tb_wvalid),    
+//    .PC_ASSERTED(tb_asserted),
+//    .PC_STATUS(tb_status)
+//); 
   
 initial begin
     slv_agent_0 = new("slave vip agent",BD_WRAPPER.bd_i.axi_vip_0.inst.IF);
@@ -229,7 +243,7 @@ initial begin
     tb_write_addr = 0;
     tb_write_data = 0;
     
-    #(5 * CLK_PERIOD);
+    #(10 * CLK_PERIOD);
     tb_write_start = 1; 
     tb_write_addr = 'h00;
     tb_write_data = 'hF1;
