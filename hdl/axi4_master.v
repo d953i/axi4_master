@@ -134,6 +134,7 @@ reg [31:0] m_writer_counter = 0;
 
 // I/O Connections assignments
 //assign WRITE_READY = ((AWREADY && WREADY) || current_state == IDLE) ? 1 : 0;
+assign WRITE_READY = (AWREADY && WREADY) ? 1 : 0;
 
 //Write Address (AW)
 assign AWID = m_awid + m_writer_counter;
